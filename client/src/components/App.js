@@ -1,6 +1,8 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import logo from '../assets/images/logo.svg';
+import '../assets/styles/App.css';
 
 function App() {
   return (

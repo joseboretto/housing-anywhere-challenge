@@ -4,7 +4,7 @@ const Loki = require("lokijs");
 let drones;
 let quadrants;
 
-
+// https://github.com/techfort/LokiJS/wiki/LokiJS-persistence-and-adapters
 const db = new Loki("./database.json", {
   autoload: true,
   autoloadCallback: databaseInitialize,
@@ -21,11 +21,6 @@ function databaseInitialize() {
     drones = db.addCollection("drones");
   }
   console.log(`number of drones in database : ${drones.count()}`);
-  quadrants = db.getCollection("quadrants");
-  if (quadrants === null) {
-    quadrants = db.addCollection("quadrants");
-  }
-  console.log(`number of quadrants in database : ${quadrants.count()}`);
 }
 
 exports.db = db;

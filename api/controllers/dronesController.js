@@ -6,9 +6,9 @@ const Drone = require("../models/drone");
 
 exports.createDrone = (req, res) => {
   utilsValidation.requestValidation(req, res).then(() => {
-      const drone = new Drone({ x: req.body.x, y: req.body.y, quadrant: undefined });
+      const drone = new Drone({ x: req.body.x, y: req.body.y, quadrant: req.body.quadrant });
       dronesService.createDrone(drone);
-      res.send({ status: "SUCCESS" });
+      res.send(drone);
     }
   ).catch(() => {
     return res;

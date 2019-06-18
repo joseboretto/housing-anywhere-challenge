@@ -9,7 +9,6 @@ const cors = require("cors");
 const expressValidator = require('express-validator')
 
 const indexRouter = require('./routes/indexRoute');
-const usersRouter = require('./routes/usersRoute');
 const dronesRouter = require('./routes/dronesRoute');
 
 const app = express();
@@ -27,7 +26,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressValidator())
 
 app.use('/', indexRouter);
-router.use('/users', usersRouter);
 router.use('/drones', dronesRouter);
 app.use('/api/v1', router);
 

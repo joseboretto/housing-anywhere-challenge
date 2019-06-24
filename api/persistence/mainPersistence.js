@@ -1,29 +1,21 @@
-/* eslint-disable no-use-before-define */
-const Loki = require("lokijs");
-
-let drones;
-let quadrants;
-
-// https://github.com/techfort/LokiJS/wiki/LokiJS-persistence-and-adapters
-const db = new Loki("./database.json", {
-  autoload: true,
-  autoloadCallback: databaseInitialize,
-  autosave: true,
-  autosaveInterval: 4000,
-  autoupdate: true
+// Import the mongoose module
+const mongoose = require("mongoose");
+const logger = require("../config/logger");
+// Set up default mongoose connection
+const mongoDBUrl = process.env.DATABASE_URL;
+logger.info(`database url ${  mongoDBUrl}`);
+mongoose.connect(mongoDBUrl, {useNewUrlParser: true})
+// Get Mongoose to use the global promise library
+mongoose.Promise = global.Promise;
+// Get the default connection
+const db = mongoose.connection;
+// Bind connection to error event (to get notification of connection errors)
+db.on("error", console.error.bind(console, "MongoDB connection error:"));
+db.once('open', function() {
+  // we're connected!
+  logger.info("Database connected");
 });
-
-
-// implement the autoloadback referenced in loki constructor
-function databaseInitialize() {
-  drones = db.getCollection("drones");
-  if (drones === null) {
-    drones = db.addCollection("drones");
-  }
-  console.log(`number of drones in database : ${drones.count()}`);
-}
-
-exports.db = db;
-exports.drones = () => { return drones};
-exports.quadrants = () => { return quadrants};
+exports.getDb = () => {
+  return db;
+};
 

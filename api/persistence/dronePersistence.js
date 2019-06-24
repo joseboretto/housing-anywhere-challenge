@@ -1,12 +1,22 @@
-const mainPersistence = require('./mainPersistence');
+const droneModels = require("./../models/drone");
+const logger = require("../config/logger");
 
-const {drones} = mainPersistence
+const { Drone } = droneModels;
 
-module.exports={
-  getAllDrones(){
-    return drones().find({})
+module.exports = {
+  async getAllDrones() {
+    const result = await Drone.find();
+    return result;
   },
-  saveDrone(drone){
-    return drones().insert(drone)
+  async saveDrone(drone) {
+    logger.debug("saveDrone");
+    try {
+      const result = await drone.save();
+      logger.debug(`saveDrone - success:`);
+      return result;
+    } catch (err) {
+      logger.error(`saveDrone - error:`);
+      throw err;
+    }
   }
-}
+};

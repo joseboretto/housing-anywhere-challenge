@@ -2,12 +2,12 @@ version: "3.7"
 services:
     client:
         image: webapp-client
-        restart: always
+        restart: "no"
         ports:
             - "3000:3000"
         working_dir: /client/src/app
         volumes:
-            - ./client:/client/src/app
+            - ./client:/client/src
         build: ./client
         entrypoint: ["npm", "start"]
         links:
@@ -16,9 +16,10 @@ services:
             - webappnetwork
     api:
         image: webapp-api
-        restart: always
+        restart: "no"
         ports:
             - "9000:9000"
+            - "9229:9229"
         volumes:
             - ./api:/api
             - /api/node_modules
@@ -29,7 +30,7 @@ services:
             - webappnetwork
     mongodb:
         image: mongo
-        restart: always
+        restart: "no"
         container_name: mongodb
         volumes:
             - ./data-node:/data/db

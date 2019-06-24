@@ -9,6 +9,6 @@ RUN npm install
 # Copy the current directory contents into the container at /api
 COPY . /api/
 # Make port 80 available to the world outside this container
-EXPOSE 80
+EXPOSE 80 9000 9229
 # Run the app when the container launches
-CMD ["npm", "start"]
+CMD ["npm", "run", "debug"]

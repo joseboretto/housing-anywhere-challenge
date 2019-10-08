@@ -2,8 +2,9 @@
 const mongoose = require("mongoose");
 const logger = require("../config/logger");
 // Set up default mongoose connection
+// URL WITH DOCKER CONTAINER HOSTNAME
 const mongoDBUrl = process.env.DATABASE_URL;
-logger.info(`database url ${  mongoDBUrl}`);
+logger.info(`database url ${mongoDBUrl}`);
 mongoose.connect(mongoDBUrl, {useNewUrlParser: true})
 // Get Mongoose to use the global promise library
 mongoose.Promise = global.Promise;
@@ -18,4 +19,5 @@ db.once('open', function() {
 exports.getDb = () => {
   return db;
 };
+
 

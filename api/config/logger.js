@@ -13,7 +13,7 @@ function filterOnly(level) {
 }
 
 const logger = function (module) {
-  var path = module.filename.split('/').slice(-2).join('/');
+  var path =  module && module.filename ?  module.filename.split('/').slice(-2).join('/') : 'NO DATA';
   return winston.createLogger({
     level: "silly",
     format: winston.format.combine(
@@ -41,6 +41,7 @@ const logger = function (module) {
 module.exports = logger;
 module.exports.stream = {
   write(message) {
-    logger.silly(message);
+    loggerObj = logger();
+    loggerObj.silly(message);
   }
 };

@@ -5,34 +5,38 @@ const winston = require("winston");
  */
 function filterOnly(level) {
   // eslint-disable-next-line consistent-return
-  return winston.format(function(info) {
+  return winston.format(function (info) {
     if (info.level === level) {
       return info;
     }
   })();
 }
 
-const logger = winston.createLogger({
-  level: "silly",
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.colorize(),
-    winston.format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
-  ),
-  transports: [
-    new winston.transports.Console({ level: "debug" }),
-    new winston.transports.File({ filename: "./logs/error.log", level: "error" }),
-    new winston.transports.File({ filename: "./logs/debug.log", level: "debug" }),
-    new winston.transports.File({
-      filename: "./logs/access.log",
-      level: "silly",
-      format: filterOnly("silly")
-    })
-  ],
-  exceptionHandlers: [
-    new winston.transports.File({ filename: "./logs/exceptions.log" })
-  ]
-});
+const logger = function (module) {
+  var path = module.filename.split('/').slice(-2).join('/');
+  return winston.createLogger({
+    level: "silly",
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.colorize(),
+        winston.format.printf(info => `${info.timestamp} [${path}] ${info.level}: ${info.message}`)
+    ),
+    transports: [
+      new winston.transports.Console({level: "debug"}),
+      new winston.transports.File({filename: "./logs/error.log", level: "error"}),
+      new winston.transports.File({filename: "./logs/debug.log", level: "debug"}),
+      new winston.transports.File({
+        filename: "./logs/access.log",
+        level: "silly",
+        format: filterOnly("silly")
+      })
+    ],
+    exceptionHandlers: [
+      new winston.transports.File({filename: "./logs/exceptions.log"})
+    ]
+  });
+}
+
 
 module.exports = logger;
 module.exports.stream = {

@@ -24,12 +24,16 @@ const droneSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  typeOfMovement: {
+    type: String,
+    required: true
+  },
   quadrant: {
     type: Number,
     required: true
   }
 });
 
-const Drone = mongoose.model("Drone", droneSchema);
+const Drone = mongoose.model("Drone", droneSchema, "dronesCollection");
 
 module.exports.Drone = Drone;

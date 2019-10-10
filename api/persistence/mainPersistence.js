@@ -1,6 +1,8 @@
 // Import the mongoose module
 const mongoose = require("mongoose");
-const logger = require("../config/logger");
+const logger = require("../config/logger")(module);
+// DEBUG
+mongoose.set('debug', true)
 // Set up default mongoose connection
 // URL WITH DOCKER CONTAINER HOSTNAME
 const mongoDBUrl = process.env.DATABASE_URL;

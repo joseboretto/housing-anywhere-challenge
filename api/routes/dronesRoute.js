@@ -5,7 +5,7 @@ const dronesRoute = express.Router();
 
 
 /* GET users listing. */
-dronesRoute.get("/", dronesController.getAllDrones);
+dronesRoute.get("/", (req, res) => dronesController.getAllDrones(req, res));
 
 dronesRoute.post(
   "/", (req, res) => dronesController.createDrone(req, res)

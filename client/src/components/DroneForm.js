@@ -5,7 +5,9 @@ class DroneForm extends React.Component {
     super(props);
     this.state = {
       x: null,
-      y: null
+      y: null,
+      typeOfMovement: null,
+      quadrant: null
     };
     this.handleChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,8 +24,25 @@ class DroneForm extends React.Component {
   }
 
   handleSubmit(event) {
-    alert(`A form was submitted: ${this.state.x} // ${this.state.y}`);
     event.preventDefault();
+    this.postDrone()
+  }
+
+  postDrone() {
+    let body = JSON.stringify(this.state);
+    console.log('postDrone', body)
+    fetch('http://localhost:9000/api/v1/drones',
+      {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: body
+      })
+      .then(res => res.json())
+      .then((data) => {
+        this.setState({data})
+        console.log(this.state)
+      })
+      .catch(console.log)
   }
 
   render() {
@@ -54,6 +73,31 @@ class DroneForm extends React.Component {
                 className="form-control"
                 id="yInput"
                 placeholder="Y Position"
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="typeOfMovement">Type of Movement</label>
+              <select
+                className="form-control"
+                id="typeOfMovement"
+                name="typeOfMovement"
+                value={this.state.typeOfMovement}
+                onChange={this.handleChange}
+              >
+                <option>Select</option>
+                <option>LINEAR</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label htmlFor="quadrantInput">Quadrant</label>
+              <input
+                name="quadrant"
+                type="number"
+                value={this.state.quadrant}
+                onChange={this.handleChange}
+                className="form-control"
+                id="quadrantInput"
+                placeholder="Quadrant"
               />
             </div>
             <input type="submit" value="Submit" className="btn btn-primary"/>

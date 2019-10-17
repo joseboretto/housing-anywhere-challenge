@@ -1,6 +1,7 @@
 const dronePersistence = require("../persistence/dronePersistence");
 const logger = require("../config/logger")(module);
 const Drone = require("../models/drone");
+const dronePosition = require("../models/dronePosition");
 
 
 exports.createDrone = (req, res) => {
@@ -32,6 +33,23 @@ exports.getAllDrones = (req, res) => {
         })
         .catch((err) => {
             logger.error(` getAllDrones - error:` + err);
+            res.status(422).json(err);
+        });
+};
+
+exports.updatePositionAllDrones = (req, res) => {
+    // logger.debug(" getAllDrones");
+    dronePersistence.getAllDrones()
+        .then((dronesLis) => {
+            dronesLis.forEach(drone => {
+                console.log(drone)
+                const droneObjUpdated = dronePosition.updatePositionByDrone(drone)
+                droneObjUpdated.save()
+            })
+            res.send({STATUS: "OK"});
+        })
+        .catch((err) => {
+            logger.error(` getAllDrones - error:${err}`);
             res.status(422).json(err);
         });
 };

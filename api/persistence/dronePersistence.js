@@ -8,10 +8,10 @@ module.exports = {
     async getAllDrones() {
         try {
             const result = await Drone.find();
-            //logger.debug(`getAllDrones - success:`);
+            // logger.debug(`getAllDrones - success:`);
             return result;
         } catch (err) {
-            logger.error(`getAllDrones - error:` + err);
+            logger.error(`getAllDrones - error:${  err}`);
             throw err;
         }
     },
@@ -22,7 +22,7 @@ module.exports = {
             logger.debug(`saveDrone - success:`);
             return result;
         } catch (err) {
-            logger.error(`saveDrone - error:` + err);
+            logger.error(`saveDrone - error:${  err}`);
             throw err;
         }
     }

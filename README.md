@@ -65,3 +65,7 @@ Code must be submitted in a git repository (GitHub, Bitbucket, GitLab), please s
 repository you have used.
 
 
+# Docker
+
+docker exec -it housing-anywhere-challenge_client_1  /bin/ash
+docker exec -it housing-anywhere-challenge_api_1  /bin/ash

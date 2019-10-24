@@ -2,7 +2,7 @@ const dronePersistence = require("../persistence/dronePersistence");
 const logger = require("../config/logger")(module);
 const Drone = require("../models/drone");
 const dronePosition = require("../models/dronePosition");
-
+const www = require("../bin/www");
 
 exports.createDrone = (req, res) => {
     logger.debug(" createDrone");
@@ -45,6 +45,7 @@ exports.updatePositionAllDrones = (req, res) => {
                 console.log(drone)
                 const droneObjUpdated = dronePosition.updatePositionByDrone(drone)
                 droneObjUpdated.save()
+                www.io.emit('droneObjUpdated', droneObjUpdated);
             })
             res.send({STATUS: "OK"});
         })

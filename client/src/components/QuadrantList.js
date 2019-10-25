@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import Quadrant from "./Quadrant";
-import openSocket from 'socket.io-client';
-const socket = openSocket('http://localhost:9000');
+// import openSocket from 'socket.io-client';
+// const socket = openSocket('http://localhost:9000');
 
 class QuadrantList extends Component {
   constructor() {

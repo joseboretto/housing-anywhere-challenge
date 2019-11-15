@@ -1,5 +1,6 @@
 import React from "react";
 import {Scatter} from 'react-chartjs-2';
+import PropTypes from "prop-types";
 import Drone from "./Drone";
 
 // https://github.com/jerairrest/react-chartjs-2
@@ -7,7 +8,10 @@ import Drone from "./Drone";
 class Quadrant extends React.Component {
   constructor() {
     super();
+
     this.state = {
+      id: null,
+      droneMap: null,
       data: {
         datasets: [{
           label: 'Scatter Dataset',
@@ -39,15 +43,14 @@ class Quadrant extends React.Component {
   }
 
   render() {
-    const {drones} = this.props;
-    console.log(this.props);
-    const DroneListRender = drones.map(drone => (
+    const {drones, droneMap} = this.props;
+    const DroneListRender = Object.keys(droneMap).map(key => (
       <div className="col-xs-6">
-        <Drone key={drone.id} id={drone.id} x={drone.x} y={drone.y} quadrant={drone.quadrant}/>
+        <Drone key={droneMap[key].id} id={droneMap[key].id} x={droneMap[key].x} y={droneMap[key].y} quadrant={droneMap[key].quadrant} />
       </div>
     ));
-    const {data} = this.state;
-    const {options} = this.state;
+    const {data, options, id} = this.state;
+    console.log('droneMap', droneMap, 'id', id)
     const divStyle = {
       width: '250px',
       height: '250px'
@@ -57,7 +60,7 @@ class Quadrant extends React.Component {
         <h2>Quadrant 1</h2>
         <div className="row">{DroneListRender}</div>
         <div style={divStyle}>
-          <Scatter data={data} options={options} width={250} height={250}/>
+          <Scatter data={data} options={options} width={250} height={250} />
         </div>
       </div>
     )
@@ -65,4 +68,8 @@ class Quadrant extends React.Component {
   }
 }
 
+// Quadrant.propTypes = {
+//   id: PropTypes,
+//   droneMap: PropTypes
+// };
 export default Quadrant;

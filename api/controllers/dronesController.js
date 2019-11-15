@@ -45,7 +45,7 @@ exports.updatePositionAllDrones = (req, res) => {
                 console.log(drone)
                 const droneObjUpdated = dronePosition.updatePositionByDrone(drone)
                 droneObjUpdated.save()
-                www.io.emit('droneObjUpdated', droneObjUpdated);
+                www.io.emit('droneUpdated', droneObjUpdated);
             })
             res.send({STATUS: "OK"});
         })

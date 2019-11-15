@@ -27,13 +27,16 @@ var io = require('socket.io')(server);
  * Listen on provided port, on all network interfaces.
  */
 
-io.on('connection', function(socket){
-  console.log('connected')
-  socket.on('chat message', function(msg){
-    console.log('chat message', msg)
-    io.emit('chat message', msg);
+io.on('connection', (client) => {
+  console.log('connected timer')
+  client.on('subscribeToTimer', (interval) => {
+    console.log('client is subscribing to timer with interval ', interval);
+    setInterval(() => {
+      client.emit('timer', new Date());
+    }, interval);
   });
 });
+
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);

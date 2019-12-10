@@ -4,19 +4,19 @@ class DroneForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      x: null,
-      y: null,
-      typeOfMovement: null,
-      quadrant: null
+      x: '',
+      y: '',
+      typeOfMovement: 'LINEAR',
+      quadrant: 1
     };
     this.handleChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleInputChange(event) {
-    const {target} = event;
+    const { target } = event;
     const value = target.type === "checkbox" ? target.checked : target.value;
-    const {name} = target;
+    const { name } = target;
     this.setState({
       [name]: value
     });
@@ -25,24 +25,29 @@ class DroneForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.postDrone()
+    this.postDrone();
   }
 
   postDrone() {
-    let body = JSON.stringify(this.state);
-    console.log('postDrone', body)
-    fetch('http://localhost:9000/api/v1/drones',
+    const body = JSON.stringify(this.state);
+    delete body.id
+    console.log("postDrone", body);
+    fetch("http://localhost:9000/api/v1/drones",
       {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'},
-        body: body
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body
       })
       .then(res => res.json())
       .then((data) => {
-        this.setState({data})
-        console.log(this.state)
+        this.setState({
+          x: '',
+          y: '',
+          typeOfMovement: 'LINEAR',
+          quadrant: 1
+        });
       })
-      .catch(console.log)
+      .catch(console.log);
   }
 
   render() {
@@ -84,13 +89,12 @@ class DroneForm extends React.Component {
                 value={this.state.typeOfMovement}
                 onChange={this.handleChange}
               >
-                <option>Select</option>
                 <option>LINEAR</option>
               </select>
             </div>
             <div className="form-group">
-              <label htmlFor="quadrantInput">Quadrant</label>
-              <input
+              <label htmlFor="typeOfMovement">Quadrant</label>
+              <select
                 name="quadrant"
                 type="number"
                 value={this.state.quadrant}
@@ -98,9 +102,15 @@ class DroneForm extends React.Component {
                 className="form-control"
                 id="quadrantInput"
                 placeholder="Quadrant"
-              />
+              >
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+
+              </select>
             </div>
-            <input type="submit" value="Submit" className="btn btn-primary"/>
+            <input type="submit" value="Submit" className="btn btn-primary" />
           </form>
         </div>
       </div>

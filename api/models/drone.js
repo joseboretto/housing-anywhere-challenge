@@ -1,4 +1,3 @@
-const uuidv1 = require("uuid/v1");
 const mongoose = require("mongoose");
 /**
  * List all drones with ​ ID ​,​ quadrant ​ and ​ current position ​ (x, y float).
@@ -13,8 +12,7 @@ const mongoose = require("mongoose");
 const droneSchema = new mongoose.Schema({
   id: {
     type: String,
-    required: true,
-    default: uuidv1()
+    required: true
   },
   x: {
     type: Number,
@@ -24,12 +22,24 @@ const droneSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  quadrant: {
+    type: Number,
+    required: true
+  },
   typeOfMovement: {
     type: String,
     required: true
   },
-  quadrant: {
+  randomNumber: {
     type: Number,
+    required: true
+  },
+  xPositiveSign: {
+    type: Boolean,
+    required: true
+  },
+  yPositiveSign: {
+    type: Boolean,
     required: true
   }
 });

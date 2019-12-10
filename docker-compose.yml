@@ -5,9 +5,9 @@ services:
         restart: "no"
         ports:
             - "3000:3000"
-        working_dir: /client/src/app
+        working_dir: /client
         volumes:
-            - ./client:/client/src
+            - ./client:/client
         build: ./client
         entrypoint: ["npm", "start"]
         links:

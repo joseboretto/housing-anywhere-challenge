@@ -3,43 +3,35 @@ import React from "react";
 class DroneForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      x: null,
-      y: null,
-      typeOfMovement: null,
-      quadrant: null
-    };
-    this.handleChange = this.handleInputChange.bind(this);
+    this.state = {};
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleInputChange(event) {
-    const {target} = event;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const {name} = target;
-    this.setState({
-      [name]: value
-    });
-    console.log(`Change detected. State updated${name} = ${value}`);
+  componentDidMount() {
+    this.jobPostDrone();
   }
+
 
   handleSubmit(event) {
     event.preventDefault();
-    this.postDrone()
+    this.postUpdatePosition();
   }
 
-  postDrone() {
-    fetch('http://localhost:9000/api/v1/drones/updatePosition',
+  postUpdatePosition() {
+    fetch("http://localhost:9000/api/v1/drones/updatePosition",
       {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'}
+        method: "post",
+        headers: { "Content-Type": "application/json" }
       })
       .then(res => res.json())
       .then((data) => {
-        this.setState({data})
-        console.log(this.state)
+        this.setState({ data });
       })
-      .catch(console.log)
+      .catch(console.log);
+  }
+
+  jobPostDrone() {
+    setInterval(() => this.postUpdatePosition(), 1000);
   }
 
   render() {
@@ -54,6 +46,7 @@ class DroneForm extends React.Component {
       </div>
     );
   }
+
 }
 
 

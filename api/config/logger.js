@@ -22,7 +22,7 @@ const logger = function (module) {
         winston.format.printf(info => `${info.timestamp} [${path}] ${info.level}: ${info.message}`)
     ),
     transports: [
-      new winston.transports.Console({level: "debug"}),
+      new winston.transports.Console({level: "error"}),
       new winston.transports.File({filename: "./logs/error.log", level: "error"}),
       new winston.transports.File({filename: "./logs/debug.log", level: "debug"}),
       new winston.transports.File({

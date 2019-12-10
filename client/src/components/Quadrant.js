@@ -1,5 +1,5 @@
 import React from "react";
-import {Scatter} from 'react-chartjs-2';
+import { Scatter } from "react-chartjs-2";
 import PropTypes from "prop-types";
 import Drone from "./Drone";
 
@@ -8,57 +8,56 @@ import Drone from "./Drone";
 class Quadrant extends React.Component {
   constructor() {
     super();
+    this.state = {};
+  }
 
-    this.state = {
-      id: null,
-      droneMap: null,
+  getScatterConfig() {
+    return {
       data: {
-        datasets: [{
-          label: 'Scatter Dataset',
-          data: [{
-            x: 0,
-            y: 10
-          }, {
-            x: 10,
-            y: 5
-          }, {
-            x: 50,
-            y: 47
-          }, {
-            x: 2,
-            y: 2
-          }]
-        }], labels: []
+        datasets: [], labels: []
       },
       options: {
         legend: {
           display: false
         },
         scales: {
-          yAxes: [{ticks: {min: 0, max: 100, stepSize: 20}}],
-          xAxes: [{ticks: {min: 0, max: 100, stepSize: 20}}]
+          yAxes: [{ ticks: { min: 0, max: 100, stepSize: 20 } }],
+          xAxes: [{ ticks: { min: 0, max: 100, stepSize: 20 } }]
         }
       }
     };
   }
 
+  getScatterConfigrFromDroneMap() {
+    const scatterConfig = this.getScatterConfig();
+    if (this.props && this.props.droneMap) {
+      const droneMapData = Object.keys(this.props.droneMap).map(key => {
+        const drone = this.props.droneMap[key];
+        return { x: drone.x, y: drone.y };
+      });
+
+      scatterConfig.data.datasets = [{
+        data: droneMapData
+      }];
+    }
+    return scatterConfig;
+
+
+  }
+
   render() {
-    const {drones, droneMap} = this.props;
-    const DroneListRender = Object.keys(droneMap).map(key => (
-      <div className="col-xs-6">
-        <Drone key={droneMap[key].id} id={droneMap[key].id} x={droneMap[key].x} y={droneMap[key].y} quadrant={droneMap[key].quadrant} />
-      </div>
-    ));
-    const {data, options, id} = this.state;
-    console.log('droneMap', droneMap, 'id', id)
+    const { id } = this.props;
+    const { data, options } = this.getScatterConfigrFromDroneMap();
     const divStyle = {
-      width: '250px',
-      height: '250px'
+      width: "250px",
+      height: "250px"
     };
     return (
       <div>
-        <h2>Quadrant 1</h2>
-        <div className="row">{DroneListRender}</div>
+        <h2>
+          Quadrant
+          {id}
+        </h2>
         <div style={divStyle}>
           <Scatter data={data} options={options} width={250} height={250} />
         </div>
@@ -68,8 +67,8 @@ class Quadrant extends React.Component {
   }
 }
 
-// Quadrant.propTypes = {
-//   id: PropTypes,
-//   droneMap: PropTypes
-// };
+Quadrant.propTypes = {
+  id: PropTypes.string,
+  droneMap: PropTypes.object
+};
 export default Quadrant;

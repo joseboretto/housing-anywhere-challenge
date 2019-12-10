@@ -1,72 +1,86 @@
 const constants = require("../util/constants");
 const logger = require("../config/logger")(module);
+const www = require("../bin/www");
 
+function getNextQuadrantX(drone) {
+  if (drone.x > 100) {
+    if (drone.quadrant === 1) {
+      drone.quadrant = 4;
+    }
+    if (drone.quadrant === 2) {
+      drone.quadrant = 3;
+    }
+    if (drone.quadrant === 3) {
+      drone.quadrant = 2;
+    }
+    if (drone.quadrant === 4) {
+      drone.quadrant = 1;
+    }
+    drone.x = 100;
+    drone.xPositiveSign = false;
+  } else if (drone.x < 0) {
+    if (drone.quadrant === 1) {
+      drone.quadrant = 4;
+    }
+    if (drone.quadrant === 2) {
+      drone.quadrant = 3;
+    }
+    if (drone.quadrant === 3) {
+      drone.quadrant = 2;
+    }
+    if (drone.quadrant === 4) {
+      drone.quadrant = 1;
+    }
+    drone.x = 0;
+    drone.xPositiveSign = true;
+  }
+  return drone;
+}
+
+function getNextQuadrantY(drone) {
+  if (drone.y > 100) {
+    if (drone.quadrant === 1) {
+      drone.quadrant = 2;
+    }
+    if (drone.quadrant === 2) {
+      drone.quadrant = 1;
+    }
+    if (drone.quadrant === 3) {
+      drone.quadrant = 4;
+    }
+    if (drone.quadrant === 4) {
+      drone.quadrant = 3;
+    }
+    drone.y = 100;
+    drone.yPositiveSign = false;
+
+  } else if (drone.y < 0) {
+    if (drone.quadrant === 1) {
+      drone.quadrant = 4;
+    }
+    if (drone.quadrant === 2) {
+      drone.quadrant = 3;
+    }
+    if (drone.quadrant === 3) {
+      drone.quadrant = 4;
+    }
+    if (drone.quadrant === 4) {
+      drone.quadrant = 3;
+    }
+    drone.y = 0;
+    drone.yPositiveSign = true;
+  }
+  return drone;
+}
 
 function getNextQuadrant(drone) {
-  logger.debug(`getNextQuadrant, drone ${drone}`);
-  const myDrone = drone;
-  if (myDrone.x > 100) {
-    if (myDrone.quadrant === 1) {
-      myDrone.quadrant = 4;
-    }
-    if (myDrone.quadrant === 2) {
-      myDrone.quadrant = 3;
-    }
-    if (myDrone.quadrant === 3) {
-      myDrone.quadrant = 2;
-    }
-    if (myDrone.quadrant === 4) {
-      myDrone.quadrant = 1;
-    }
-    myDrone.x = 100;
-    myDrone.xPositiveSign = false;
-  } else if (myDrone.x < 0) {
-    if (myDrone.quadrant === 1) {
-      myDrone.quadrant = 4;
-    }
-    if (myDrone.quadrant === 2) {
-      myDrone.quadrant = 3;
-    }
-    if (myDrone.quadrant === 3) {
-      myDrone.quadrant = 2;
-    }
-    if (myDrone.quadrant === 4) {
-      myDrone.quadrant = 1;
-    }
-    myDrone.x = 0;
-    myDrone.xPositiveSign = true;
-  }
-  if (myDrone.y > 100) {
-    if (myDrone.quadrant === 1) {
-      myDrone.quadrant = 2;
-    }
-    if (myDrone.quadrant === 2) {
-      myDrone.quadrant = 1;
-    }
-    if (myDrone.quadrant === 3) {
-      myDrone.quadrant = 4;
-    }
-    if (myDrone.quadrant === 4) {
-      myDrone.quadrant = 3;
-    }
-    myDrone.y = 100;
-    myDrone.yPositiveSign = false;
-
-  } else if (myDrone.y < 0) {
-    if (myDrone.quadrant === 1) {
-      myDrone.quadrant = 4;
-    }
-    if (myDrone.quadrant === 2) {
-      myDrone.quadrant = 3;
-    }
-    if (myDrone.quadrant === 3) {
-      myDrone.quadrant = 4;
-    }
-    if (myDrone.quadrant === 4) {
-      myDrone.quadrant = 3;
-    }
-    myDrone.y = 0;
-    myDrone.yPositiveSign = true;
+  const droneCopy = JSON.parse(JSON.stringify(drone));
+  let myDrone = drone;
+  myDrone = getNextQuadrantX(drone);
+  myDrone = getNextQuadrantY(drone);
+  if (droneCopy.quadrant !== drone.quadrant) {
+    logger.error(`getNextQuadrant, myDrone ${myDrone}, droneCopy ${droneCopy}`);
+    www.io.emit("droneQuadrantUpdated", myDrone);
   }
   return myDrone;
 }
@@ -83,9 +97,10 @@ function getNextPositionLinear(drone) {
     slope = -slope;
   }
   myDrone.x += STEP_SIZE;
-  myDrone.y = intercept + (slope * (myDrone.x));
+  myDrone.y = intercept + (slope * (drone.x));
   logger.debug(`getNextPositionLinear ${myDrone}`);
-  return getNextQuadrant(myDrone);
+  const nextQuadrant = getNextQuadrant(myDrone);
+  return nextQuadrant;
 }
 
 

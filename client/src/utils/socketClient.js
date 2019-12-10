@@ -10,4 +10,9 @@ function subscribeToTimer(cb) {
 function subscribeToDroneUpdate(cb) {
   socket.on('droneUpdated', drone => cb(null, drone));
 }
-export { subscribeToTimer, subscribeToDroneUpdate };
+
+function subscribeToDroneQuadrantUpdated(cb) {
+  socket.on('droneQuadrantUpdated', drone => cb(null, drone));
+}
+
+export { subscribeToTimer, subscribeToDroneUpdate, subscribeToDroneQuadrantUpdated };

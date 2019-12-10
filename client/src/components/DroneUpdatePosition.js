@@ -31,7 +31,7 @@ class DroneForm extends React.Component {
   }
 
   jobPostDrone() {
-    setInterval(() => this.postUpdatePosition(), 1000);
+    setInterval(() => this.postUpdatePosition(), 500);
   }
 
   render() {

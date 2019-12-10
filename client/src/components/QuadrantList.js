@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Quadrant from "./Quadrant";
-import { subscribeToTimer, subscribeToDroneUpdate } from "../utils/socketClient";
+import { subscribeToTimer, subscribeToDroneUpdate, subscribeToDroneQuadrantUpdated } from "../utils/socketClient";
 
 class QuadrantList extends Component {
   constructor(props) {
@@ -11,6 +11,8 @@ class QuadrantList extends Component {
       })
     );
     subscribeToDroneUpdate((err, drone) => this.setDroneUpdateToDroneMap(drone));
+
+    subscribeToDroneQuadrantUpdated((err, drone) => this.droneQuadrantUpdated(drone));
 
     this.state = {
       loading: true,
@@ -47,6 +49,11 @@ class QuadrantList extends Component {
     this.getDrones();
   }
 
+  // eslint-disable-next-line react/sort-comp
+  droneQuadrantUpdated(drone){
+    console.log('droneQuadrantUpdated', drone)
+  }
+
   setDroneUpdateToDroneMap(drone) {
     const { droneMapByQuadrantMap, droneMap } = this.state;
     // NEW QUADRANT
@@ -55,7 +62,7 @@ class QuadrantList extends Component {
     }
     // if drone's quadrant have changed, i have to remove it from the previous one
     if (droneMap[drone.id] && droneMap[drone.id].quadrant !== drone.quadrant) {
-      delete droneMapByQuadrantMap[drone.quadrant][drone.id];
+      delete droneMapByQuadrantMap[droneMap[drone.id].quadrant][drone.id];
     }
     droneMapByQuadrantMap[drone.quadrant][drone.id] = drone;
     this.addDroneMap(drone);
@@ -75,7 +82,8 @@ class QuadrantList extends Component {
         // Drone map
         const droneMap = data.reduce((map, obj) => {
           const result = { ...map };
-          return result[obj.id] = obj;
+          result[obj.id] = obj;
+          return result
         }, {});
         this.setState({ droneMap });
         this.setState({ loading: false });
@@ -118,11 +126,11 @@ class QuadrantList extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-xs-6" key={`col-${2}`}>
-            <Quadrant droneMap={droneMapByQuadrantMap[2]} id={2} key={2} />
-          </div>
           <div className="col-xs-6" key={`col-${3}`}>
             <Quadrant droneMap={droneMapByQuadrantMap[3]} id={3} key={3} />
+          </div>
+          <div className="col-xs-6" key={`col-${2}`}>
+            <Quadrant droneMap={droneMapByQuadrantMap[2]} id={2} key={2} />
           </div>
         </div>
       </div>

@@ -56,7 +56,7 @@ class Quadrant extends React.Component {
       <div>
         <h2>
           Quadrant
-          {id}
+          {` ${id}`}
         </h2>
         <div style={divStyle}>
           <Scatter data={data} options={options} width={250} height={250} />
